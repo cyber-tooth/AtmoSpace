@@ -18,14 +18,18 @@ Dafuer schreibe ich ein Python-Skript, das die Werte liest (siehe die Datei simp
 
 Dann erstelle ich einen neue index-Datei im Raspberry-Verzeichnis /var/www/html namens Index.php (siehe Datei im Repo). Damit diese angesprochen wird, muss die alte index.html-Datei im Verzeichnis geloescht werden.
 
-Nun muss dem Nutzer www-data, der für den Webserver zuständig ist, das Recht gegeben werden, dieses Skript mit sudo auszuführen. Dafür schreiben wir in der Datei 010_pi-nopasswd 1 Zeile:
+Nun muss dem Nutzer www-data, der für den Webserver zustaendig ist, das Recht gegeben werden, dieses Skript mit sudo auszufuehren. Dafuer schreiben wir in der Datei 010_pi-nopasswd 1 Zeile:
+
 $ sudo nano /etc/sudoers.d/010_pi-nopasswd 
 
 www-data ALL=NOPASSWD: /home/pi/simpletest.py
 
-Dann machen wir die Skript-Datei für den Nutzer auch noch lesbar und ausführbar mit folgenden Befehlen in dem Verzeichnis indem sich die Skriptdatei befindet:
+Dann machen wir die Skript-Datei fuer den Nutzer auch noch lesbar und ausfuehrbar mit folgenden Befehlen in dem Verzeichnis indem sich die Skriptdatei befindet:
+
 $ sudo chown pi:pi simpletest.py 
+
 $ chmod +x simpletest.py 
+
 $ ls -l simpletest.py 
 
 Jetzt im Browser IP des Raspis angeben. Bei Refresh kommen die neuen Werte rein.
