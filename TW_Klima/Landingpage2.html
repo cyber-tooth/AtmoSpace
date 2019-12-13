@@ -31,7 +31,7 @@
                 ["15.00 h", 18.94, "blue"],
                 ["16.00 h", 19.49, "lightblue"],
                 ["17.00 h", 19.30, "blue"],
-                ["18.00 h", 21.45, "lightblue"]
+                ["18.00 h", temperature, "lightblue"]
             ]);
 
             var view = new google.visualization.DataView(data);
@@ -41,6 +41,29 @@
                     type: "string",
                     role: "annotation" },
                 2]);
+
+            var notiz_temp = "I don't have a temperature";
+            for (var i = 0; i < data.getNumberOfRows(); i++) {
+                switch (data.getValue(i, 1)) {
+                    case (data.getValue(i, 1)<18):
+                        notiz_temp = "It's too cold!";
+                        break;
+
+                    case (18<data.getValue(i, 1)<19):
+                        notiz_temp = "It's getting a little drafty...";
+                        break;
+
+                    case (19<=data.getValue(i, 1)<20):
+                        notiz_temp = "Great weather!";
+                        break;
+
+                    case (20<=data.getValue(i, 1)<21):
+                        notiz_temp = "Waaaah it's so warm!";
+                        break;
+                }
+                document.getElementById('temp_textarea').innerHTML = notiz_temp;
+            }
+
 
             var options = {
                 width: 600,
@@ -60,8 +83,32 @@
 
             ]);
 
+            var notiz_luft = "I don't have a humidity factor";
+            for (var i = 0; i < data.getNumberOfRows(); i++) {
+                switch (data.getValue(i, 1)) {
+                    case (data.getValue(i, 1)<18):
+                        notiz_temp = "It's too cold!";
+                        break;
+
+                    case (18<data.getValue(i, 1)<19):
+                        notiz_temp = "It's getting a little drafty...";
+                        break;
+
+                    case (19<=data.getValue(i, 1)<20):
+                        notiz_temp = "Great weather!";
+                        break;
+
+                    case (20<=data.getValue(i, 1)<21):
+                        notiz_temp = "Waaaah it's so warm!";
+                        break;
+                }
+                document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
+            }
+
             var options = {
-                width: 400, height: 400,
+                width: 400,
+                height: 400,
+                title: title_luft,
                 greenFrom:40, greenTo:60,
                 redFrom: 80, redTo: 100,
                 yellowFrom:60, yellowTo: 80,
@@ -95,7 +142,8 @@
 
             var options = {
                 width: 600,
-                height: 400
+                height: 400,
+                title: "Toppings I Like On My Pizza"
             };
 
             var chart = new google.charts.Line(document.getElementById('chart_laut'));
@@ -142,7 +190,6 @@
 </head>
 <body>
 <table>
-
     <tr>
         <td id="kachel">
             <div id="chart_temp"></div>
@@ -150,6 +197,7 @@
 
 
         <td>
+            <textarea id="temp_textarea">Text to be changed</textarea>
         </td>
 
         <td id="kachel">
@@ -159,6 +207,7 @@
 
     <tr>
         <td id="titel">
+            <p id="output"></p> <!--This is to test what title_temp has been set.-->
             <h2>Temperatur</h2>
         </td>
 
