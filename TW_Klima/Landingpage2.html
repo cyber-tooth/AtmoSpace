@@ -7,6 +7,8 @@
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+        var temperature = '{{temperature}}';
+        var humidity = '{{humidity}}';
 
         google.charts.load("current", {packages:['corechart']});
         google.charts.setOnLoadCallback(drawChart_temp);
@@ -46,24 +48,27 @@
             for (var i = 0; i < data.getNumberOfRows(); i++) {
                 switch (data.getValue(i, 1)) {
                     case (data.getValue(i, 1)<18):
-                        notiz_temp = "It's too cold!";
+                        notiz_temp = "Brr… It’s cold as Ice! Dreh mal die Heizung auf!";
                         break;
 
-                    case (18<data.getValue(i, 1)<19):
-                        notiz_temp = "It's getting a little drafty...";
+                    case (18<data.getValue(i, 1)<=19):
+                        notiz_temp = "Baby it’s getting cold inside! Fenster zu und Heizung an!";
                         break;
 
-                    case (19<=data.getValue(i, 1)<20):
-                        notiz_temp = "Great weather!";
+                    case (20<=data.getValue(i, 1)<=24):
+                        notiz_temp = "I got the right temperature – so lässt es sich aushalten!";
                         break;
 
-                    case (20<=data.getValue(i, 1)<21):
-                        notiz_temp = "Waaaah it's so warm!";
+                    case (25<=data.getValue(i, 1)<26):
+                        notiz_temp = "It’s getting hot in here – also mach mal die Fenster auf Kippstellung";
+                        break;
+
+                    case (26<=data.getValue(i, 1)):
+                        notiz_temp = "The heat is on! Mindestens 3 Minuten stoßlüften und Jalousien runter!";
                         break;
                 }
                 document.getElementById('temp_textarea').innerHTML = notiz_temp;
             }
-
 
             var options = {
                 width: 600,
@@ -75,31 +80,36 @@
             chart.draw(view, options);
         }
 
+
         function drawChart_luft() {
 
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
-                ['%', 55]
+                ['%', parseFloat(humidity)]
 
             ]);
 
             var notiz_luft = "I don't have a humidity factor";
             for (var i = 0; i < data.getNumberOfRows(); i++) {
                 switch (data.getValue(i, 1)) {
-                    case (data.getValue(i, 1)<18):
-                        notiz_temp = "It's too cold!";
+                    case (data.getValue(i, 1)>80):
+                        notiz_luft = "Tropisches Klima – Pflanzen umsiedeln und Schälchen mit Salz aufstellen.";
                         break;
 
-                    case (18<data.getValue(i, 1)<19):
-                        notiz_temp = "It's getting a little drafty...";
+                    case (70<=data.getValue(i, 1)<=80):
+                        notiz_luft = "Fast zu feucht";
                         break;
 
-                    case (19<=data.getValue(i, 1)<20):
-                        notiz_temp = "Great weather!";
+                    case (62<=data.getValue(i, 1)<70):
+                        notiz_luft = "Angenehme Luftfeutigkeit – so kann es bleiben!";
                         break;
 
-                    case (20<=data.getValue(i, 1)<21):
-                        notiz_temp = "Waaaah it's so warm!";
+                    case (55<=data.getValue(i, 1)<62):
+                        notiz_luft = "Fast zu trocken";
+                        break;
+
+                    case (55>data.getValue(i, 1)):
+                        notiz_luft = "Wüstenluft - Schälchen mit Wasser aufstellen (am besten auf der Heizung)";
                         break;
                 }
                 document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
@@ -108,7 +118,6 @@
             var options = {
                 width: 400,
                 height: 400,
-                title: title_luft,
                 greenFrom:40, greenTo:60,
                 redFrom: 80, redTo: 100,
                 yellowFrom:60, yellowTo: 80,
@@ -120,7 +129,7 @@
             chart.draw(data, options);
 
             setInterval(function() {
-                data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+                data.setValue(humidity);
                 chart.draw(data, options);
             }, 13000);
 
@@ -140,10 +149,27 @@
                 ["19.00 h",  40.00]
             ]);
 
+            var notiz_laut = "I don't have a loudness factor";
+            for (var i = 0; i < data.getNumberOfRows(); i++) {
+                switch (data.getValue(i, 1)) {
+                    case (data.getValue(i, 1)>=50):
+                        notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
+                        break;
+
+                    case (40<=data.getValue(i, 1)<50):
+                        notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
+                        break;
+
+                    case (data.getValue(i, 1)<40):
+                        notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
+                        break;
+                }
+                document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
+            }
+
             var options = {
                 width: 600,
                 height: 400,
-                title: "Toppings I Like On My Pizza"
             };
 
             var chart = new google.charts.Line(document.getElementById('chart_laut'));
@@ -165,10 +191,10 @@
             width: 100%;
         }
 
-        td{
-            width: 20%;
+        /*        td{
+                    width: 20%;
 
-        }
+                }*/
 
         #kachel{
             position: center;
@@ -189,16 +215,29 @@
     </style>
 </head>
 <body>
+<?php
+passthru("sudo /home/pi/read_and_render.py");
+?>
 <table>
     <tr>
         <td id="kachel">
             <div id="chart_temp"></div>
         </td>
 
+        <td>
+        <td>
+
+            <textarea id="temp_textarea">Text to be changed</textarea>
+
+        </td>
 
         <td>
-            <textarea id="temp_textarea">Text to be changed</textarea>
+
+            <textarea id="luft_textarea">Text to be changed</textarea>
+
         </td>
+        </td>
+
 
         <td id="kachel">
             <div id="chart_luft"></div>
@@ -207,12 +246,13 @@
 
     <tr>
         <td id="titel">
-            <p id="output"></p> <!--This is to test what title_temp has been set.-->
             <h2>Temperatur</h2>
         </td>
 
 
         <td>
+        <td></td>
+        <td></td>
         </td>
 
         <td id="titel">
@@ -233,6 +273,17 @@
 
 
         <td>
+        <td>
+
+            <textarea id="co_textarea">Text to be changed</textarea>
+
+        </td>
+
+        <td>
+
+            <textarea id="laut_textarea">Text to be changed</textarea>
+
+        </td>
         </td>
 
         <td id="kachel">
@@ -246,6 +297,8 @@
         </td>
 
         <td>
+        <td></td>
+        <td></td>
         </td>
 
         <td id="titel">
