@@ -9,6 +9,16 @@
     <script type="text/javascript">
         var temperature = '{{temperature}}';
         var humidity = '{{humidity}}';
+        var loudness = '{{loudness}}';
+/*
+        var carbondioxide = '{{carbondioxide}}';
+        temperature = '20';
+        humidity = '72';
+        loudness = '60';
+        carbondioxide = '43';
+*/
+
+
 
         google.charts.load("current", {packages:['corechart']});
         google.charts.setOnLoadCallback(drawChart_temp);
@@ -44,31 +54,22 @@
                     role: "annotation" },
                 2]);
 
-            var notiz_temp = "I don't have a temperature";
-            for (var i = 0; i < data.getNumberOfRows(); i++) {
-                switch (data.getValue(i, 1)) {
-                    case (data.getValue(i, 1)<18):
-                        notiz_temp = "Brr… It’s cold as Ice! Dreh mal die Heizung auf!";
-                        break;
-
-                    case (18<data.getValue(i, 1)<=19):
-                        notiz_temp = "Baby it’s getting cold inside! Fenster zu und Heizung an!";
-                        break;
-
-                    case (20<=data.getValue(i, 1)<=24):
-                        notiz_temp = "I got the right temperature – so lässt es sich aushalten!";
-                        break;
-
-                    case (25<=data.getValue(i, 1)<26):
-                        notiz_temp = "It’s getting hot in here – also mach mal die Fenster auf Kippstellung";
-                        break;
-
-                    case (26<=data.getValue(i, 1)):
-                        notiz_temp = "The heat is on! Mindestens 3 Minuten stoßlüften und Jalousien runter!";
-                        break;
-                }
-                document.getElementById('temp_textarea').innerHTML = notiz_temp;
+            var notiz_temp;
+            console.log(parseFloat(temperature));
+            if (parseFloat(temperature) < 18) {
+                notiz_temp = "Brr… It’s cold as Ice! Dreh mal die Heizung auf!";
+            } else if (18 < parseFloat(temperature) && parseFloat(temperature) <= 19.9) {
+                notiz_temp = "Baby it’s getting cold inside! Fenster zu und Heizung an!";
+            } else if (19.9 < parseFloat(temperature) && parseFloat(temperature) <= 24.9) {
+                notiz_temp = "I got the right temperature – so lässt es sich aushalten!";
+            } else if (24.9 < parseFloat(temperature) && parseFloat(temperature) < 26.9)  {
+                notiz_temp = "It’s getting hot in here – also mach mal die Fenster auf Kippstellung";
+            } else if (26.9 <= parseFloat(temperature)) {
+                notiz_temp = "The heat is on! Mindestens 3 Minuten stoßlüften und Jalousien runter!";
+            } else {
+                notiz_temp = "I don't have a temperature";
             }
+            document.getElementById('temp_textarea').innerHTML = notiz_temp;
 
             var options = {
                 width: 600,
@@ -89,31 +90,21 @@
 
             ]);
 
-            var notiz_luft = "I don't have a humidity factor";
-            for (var i = 0; i < data.getNumberOfRows(); i++) {
-                switch (data.getValue(i, 1)) {
-                    case (data.getValue(i, 1)>80):
-                        notiz_luft = "Tropisches Klima – Pflanzen umsiedeln und Schälchen mit Salz aufstellen.";
-                        break;
-
-                    case (70<=data.getValue(i, 1)<=80):
-                        notiz_luft = "Fast zu feucht";
-                        break;
-
-                    case (62<=data.getValue(i, 1)<70):
-                        notiz_luft = "Angenehme Luftfeutigkeit – so kann es bleiben!";
-                        break;
-
-                    case (55<=data.getValue(i, 1)<62):
-                        notiz_luft = "Fast zu trocken";
-                        break;
-
-                    case (55>data.getValue(i, 1)):
-                        notiz_luft = "Wüstenluft - Schälchen mit Wasser aufstellen (am besten auf der Heizung)";
-                        break;
-                }
-                document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
+            var notiz_luft;
+            if (parseFloat(humidity) > 80) {
+                notiz_luft = "Tropisches Klima – Pflanzen umsiedeln und Schälchen mit Salz aufstellen.";
+            } else if (70 <= parseFloat(humidity) && parseFloat(humidity) <= 80) {
+                notiz_luft = "Fast zu feucht";
+            } else if (62 <= parseFloat(humidity) && parseFloat(humidity) < 70) {
+                notiz_luft = "Angenehme Luftfeutigkeit – so kann es bleiben!";
+            } else if (55 <= parseFloat(humidity) && parseFloat(humidity) < 62) {
+                notiz_luft = "Fast zu trocken";
+            } else if (55 > parseFloat(humidity)) {
+                notiz_luft = "Wüstenluft - Schälchen mit Wasser aufstellen (am besten auf der Heizung)";
+            } else {
+                notiz_luft = "I don't have a humidity reading";
             }
+            document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
 
             var options = {
                 width: 400,
@@ -149,23 +140,19 @@
                 ["19.00 h",  40.00]
             ]);
 
-            var notiz_laut = "I don't have a loudness factor";
-            for (var i = 0; i < data.getNumberOfRows(); i++) {
-                switch (data.getValue(i, 1)) {
-                    case (data.getValue(i, 1)>=50):
-                        notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
-                        break;
-
-                    case (40<=data.getValue(i, 1)<50):
-                        notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
-                        break;
-
-                    case (data.getValue(i, 1)<40):
-                        notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
-                        break;
-                }
-                document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
+            var notiz_laut;
+            if (parseFloat(loudness) >= 50) {
+                notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
+            } else if (40 <= parseFloat(loudness) && parseFloat(loudness) < 50) {
+                notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
+            } else if (parseFloat(loudness) < 40) {
+                notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
+            } else {
+                notiz_laut = "I don't have a loudness reading.";
             }
+
+            document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
+
 
             var options = {
                 width: 600,
@@ -191,10 +178,9 @@
             width: 100%;
         }
 
-        /*        td{
-                    width: 20%;
-
-                }*/
+        textarea{
+            height: 80px;
+        }
 
         #kachel{
             position: center;
