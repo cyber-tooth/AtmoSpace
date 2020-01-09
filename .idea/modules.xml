@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/tw_klima.iml" filepath="$PROJECT_DIR$/tw_klima.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AtmoSpace.iml" filepath="$PROJECT_DIR$/.idea/AtmoSpace.iml" />
     </modules>
   </component>
 </project>
