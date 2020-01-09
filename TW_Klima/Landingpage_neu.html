@@ -158,7 +158,7 @@
         }
 
         function drawChart_laut() {
-            var data = google.visualization.arrayToDataTable([
+            /*var data = google.visualization.arrayToDataTable([
                 ['Zeit', 'aktuelle Lautstärke', 'Grenzwert'],
                 ['',  0.0,         55.0],
                 ['aktuelle Zeit',  60.0,        55.0],
@@ -221,8 +221,8 @@
 
             var chart = new google.charts.Line(document.getElementById('chart_laut'));
 
-            chart.draw(data, google.charts.Line.convertOptions(options));
-        }*/
+            chart.draw(data, google.charts.Line.convertOptions(options));*/
+        }
 
     </script>
     <style>
@@ -276,7 +276,23 @@
             color: red;
             position: center;
         }
+        #laut_super{
+            font-size: 300px;
+            color: green;
+            position: center;
+        }
 
+        #laut_ok{
+            font-size: 300px;
+            color: yellow;
+            position: center;
+        }
+
+        #laut_bad{
+            font-size: 300px;
+            color: red;
+            position: center;
+        }
 
 
     </style>
@@ -356,7 +372,9 @@
         </td>
 
         <td id="kachel">
-            <div id="chart_laut"></div>
+            <div id="chart_laut">
+                <i class="material-icons" id="laut_ok">volume_up</i>
+            </div>
         </td>
     </tr>
 
