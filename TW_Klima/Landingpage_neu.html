@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Landingpage</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        var temperature = '{{temperature}}';
+        var humidity = '{{humidity}}';
+        var loudness = '{{loudness}}';
+/*
+                var carbondioxide = '{{carbondioxide}}';
+                temperature = '20';
+                humidity = '72';
+                loudness = '60';
+                carbondioxide = '43';
+*/
+
+        google.charts.load("current", {packages:['corechart']});
+        google.charts.setOnLoadCallback(drawChart_temp);
+        <!--Luftfeuchte-->
+        google.charts.load('current', {'packages':['gauge']});
+        google.charts.setOnLoadCallback(drawChart_luft);
+        <!--Lautstärke-->
+        google.charts.load('current', {'packages':['line']});
+        google.charts.setOnLoadCallback(drawChart_laut);
+
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+
+
+        // Create the data table.
+        function drawChart_temp() {
+            var data = google.visualization.arrayToDataTable([
+                ['Zeit', 'aktuelle Temperatur','min. Grenzwert','max.Grenzwert'],
+                ['',  0.0,  20.00,       23.0],
+                ['aktuelle Zeit',    temperature,    23.0,  20.00,],
+                ['',  0.0,    20.00,     23.0]
+            ]);
+
+            var notiz_temp;
+            console.log(parseFloat(temperature));
+            if (parseFloat(temperature) < 18) {
+                notiz_temp = "Brr… It’s cold as Ice! Dreh mal die Heizung auf!";
+            } else if (18 < parseFloat(temperature) && parseFloat(temperature) <= 19.9) {
+                notiz_temp = "Baby it’s getting cold inside! Fenster zu und Heizung an!";
+            } else if (19.9 < parseFloat(temperature) && parseFloat(temperature) <= 24.9) {
+                notiz_temp = "I got the right temperature – so lässt es sich aushalten!";
+            } else if (24.9 < parseFloat(temperature) && parseFloat(temperature) < 26.9)  {
+                notiz_temp = "It’s getting hot in here – also mach mal die Fenster auf Kippstellung";
+            } else if (26.9 <= parseFloat(temperature)) {
+                notiz_temp = "The heat is on! Mindestens 3 Minuten stoßlüften und Jalousien runter!";
+            } else {
+                notiz_temp = "I don't have a temperature";
+            }
+            document.getElementById('temp_textarea').innerHTML = notiz_temp;
+
+            var options = {
+                width: 600,
+                height: 400,
+                vAxis: {title: 'Temperatur in C'},
+                curveType: 'function',
+                legend: { position: 'bottom' },
+                colors:['blue','red', 'red']
+                //seriesType: 'bars',
+                //series: {1: {type:'line'}},
+                //series: {2: {type:'line'}}
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_temp'));
+            chart.draw(data, options);
+
+
+        }
+
+
+        function drawChart_luft() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['%', parseFloat(humidity)]
+
+            ]);
+
+            var notiz_luft;
+            if (parseFloat(humidity) > 80) {
+                notiz_luft = "Tropisches Klima – Pflanzen umsiedeln und Schälchen mit Salz aufstellen.";
+            } else if (70 <= parseFloat(humidity) && parseFloat(humidity) <= 80) {
+                notiz_luft = "Fast zu feucht";
+            } else if (62 <= parseFloat(humidity) && parseFloat(humidity) < 70) {
+                notiz_luft = "Angenehme Luftfeutigkeit – so kann es bleiben!";
+            } else if (55 <= parseFloat(humidity) && parseFloat(humidity) < 62) {
+                notiz_luft = "Fast zu trocken";
+            } else if (55 > parseFloat(humidity)) {
+                notiz_luft = "Wüstenluft - Schälchen mit Wasser aufstellen (am besten auf der Heizung)";
+            } else {
+                notiz_luft = "I don't have a humidity reading";
+            }
+            document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
+
+            var options = {
+                width: 400,
+                height: 400,
+                greenFrom:40, greenTo:60,
+                redFrom: 80, redTo: 100,
+                yellowFrom:60, yellowTo: 80,
+                minorTicks: 6
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('chart_luft'));
+
+            chart.draw(data, options);
+
+            setInterval(function() {
+                data.setValue(humidity);
+                chart.draw(data, options);
+            }, 13000);
+
+        }
+
+        function drawChart_co2() {
+
+        }
+
+        function drawChart_laut() {
+            var data = google.visualization.arrayToDataTable([
+                ['Zeit', 'aktuelle Lautstärke', 'Grenzwert'],
+                ['',  0.0,         55.0],
+                ['aktuelle Zeit',  60.0,        55.0],
+                ['',  0.0,        55.0]
+            ]);
+
+            var notiz_laut;
+            if (parseFloat(loudness) >= 50) {
+                notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
+            } else if (40 <= parseFloat(loudness) && parseFloat(loudness) < 50) {
+                notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
+            } else if (parseFloat(loudness) < 40) {
+                notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
+            } else {
+                notiz_laut = "I don't have a loudness reading.";
+            }
+            document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
+
+
+            var options = {
+                width: 600,
+                height: 400,
+                vAxis: {title: 'DB'},
+                seriesType: 'bars',
+                series: {1: {type: 'line'}}
+            };
+
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_laut'));
+            chart.draw(data, options);
+
+
+        }
+
+    </script>
+    <style>
+
+        h2{
+            font-family: Arial;
+        }
+
+        table{
+            background-color: #CEF6E3;
+            padding: 40px;
+            height:100%;
+            width: 100%;
+        }
+
+/*        td{
+            width: 20%;
+
+        }*/
+
+        textarea{
+            height: 80px;
+        }
+
+        #kachel{
+            position: center;
+            background-color: white;
+            border: 3px solid #000;
+            height: 20%;
+            width: 40%;
+        }
+
+        #titel{
+            text-align: center;
+            color:black;
+            width:40%;
+        }
+
+        #co2_super{
+            font-size: 300px;
+            color: green;
+            position: center;
+        }
+
+        #co2_ok{
+            /*<i class="material-icons" id="co2_ok">sentiment_satisfied</i>*/
+            font-size: 300px;
+            color: yellow;
+            position: center;
+        }
+
+        #co2_bad{
+            /*<i class="material-icons" id="co2_ok">sentiment_very_dissatisfied</i>*/
+            font-size: 300px;
+            color: red;
+            position: center;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td id="kachel">
+            <div id="chart_temp"></div>
+        </td>
+
+        <td>
+            <td>
+
+                <textarea id="temp_textarea">Text to be changed</textarea>
+
+            </td>
+
+            <td>
+
+                <textarea id="luft_textarea">Text to be changed</textarea>
+
+            </td>
+        </td>
+
+
+        <td id="kachel">
+            <div id="chart_luft"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td id="titel">
+            <p id="output"></p> <!--This is to test what title_temp has been set.-->
+            <h2>Temperatur</h2>
+        </td>
+
+
+        <td>
+            <td></td>
+            <td></td>
+        </td>
+
+        <td id="titel">
+            <h2>Luftfeuchtigkeit</h2>
+        </td>
+    </tr>
+
+    <tr>
+    </tr>
+
+    <tr>
+    </tr>
+
+    <tr>
+
+        <td id="kachel">
+            <div id="chart_co">
+                <i class="material-icons" id="co2_super">sentiment_very_satisfied</i>
+            </div>
+        </td>
+
+        </td>
+
+        <td>
+        <td>
+
+            <textarea id="co_textarea">Text to be changed</textarea>
+
+        </td>
+
+        <td>
+
+            <textarea id="laut_textarea">Text to be changed</textarea>
+
+        </td>
+        </td>
+
+        <td id="kachel">
+            <div id="chart_laut"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td id="titel">
+            <h2>CO2</h2>
+        </td>
+
+        <td>
+            <td></td>
+            <td></td>
+        </td>
+
+        <td id="titel">
+            <h2>Lautstärke</h2>
+        </td>
+    </tr>
+
+</table>
+
+</body>
+
+</html>
