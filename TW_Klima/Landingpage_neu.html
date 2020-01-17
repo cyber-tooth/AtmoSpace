@@ -14,11 +14,9 @@
         var temperature = '{{temperature}}';
         var humidity = '{{humidity}}';
         var loudness = '{{loudness}}';
-        /*
                         temperature = '20';
                         humidity = '72';
                         loudness = '60';
-        */
 
         google.charts.load("current", {packages:['corechart']});
         google.charts.setOnLoadCallback(drawChart_temp);
@@ -239,12 +237,12 @@
 
     <tr>
         <td>
-            <textarea id="temp_textarea">Text to be changed</textarea>
+            <textarea readonly id="temp_textarea">Text to be changed</textarea>
         </td>
         <td>
         </td>
         <td>
-            <textarea id="luft_textarea">Text to be changed</textarea>
+            <textarea readonly id="luft_textarea">Text to be changed</textarea>
         </td>
     </tr>
 
@@ -274,7 +272,7 @@
         <td>
         </td>
         <td>
-            <textarea id="laut_textarea">Text to be changed</textarea>
+            <textarea readonly id="laut_textarea">Text to be changed</textarea>
         </td>
         <td>
         </td>
