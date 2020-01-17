@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -6,7 +5,7 @@
     <title>Landingpage</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+          rel="stylesheet">
 
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -30,77 +29,7 @@
 
         // Create the data table.
         function drawChart_temp() {
-            var data = google.visualization.arrayToDataTable([
-                ['Zeit', 'aktuelle Temperatur','min. Grenzwert','max.Grenzwert'],
-                ['',  0.0,  20.00,       23.0],
-                ['aktuelle Zeit',    25.0,    23.0,  20.00,],
-                ['',  0.0,    20.00,     23.0]
-            ]);
-
-            var options = {
-                width: 600,
-                height: 400,
-                vAxis: {title: 'Temperatur in C'},
-                curveType: 'function',
-                legend: { position: 'bottom' },
-                colors:['blue','red', 'red']
-                //seriesType: 'bars',
-                //series: {1: {type:'line'}},
-                //series: {2: {type:'line'}}
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('chart_temp'));
-            chart.draw(data, options);
-
-
         }
-           /*var data = google.visualization.arrayToDataTable([
-                ["Zeit", "Celsius", { role: "style" } ],
-                ["15.00 h", 18.94, "blue"],
-                ["16.00 h", 19.49, "lightblue"],
-                ["17.00 h", 19.30, "blue"],
-                ["18.00 h", "{{Temperature}}", "lightblue"]
-            ]);
-
-            var view = new google.visualization.DataView(data);
-            view.setColumns([0, 1,
-                { calc: "stringify",
-                    sourceColumn: 1,
-                    type: "string",
-                    role: "annotation" },
-                2]);
-
-            var notiz_temp = "I don't have a temperature";
-            for (var i = 0; i < data.getNumberOfRows(); i++) {
-                switch (data.getValue(i, 1)) {
-                    case (data.getValue(i, 1)<18):
-                        notiz_temp = "It's too cold!";
-                        break;
-
-                    case (18<data.getValue(i, 1)<19):
-                        notiz_temp = "It's getting a little drafty...";
-                        break;
-
-                    case (19<=data.getValue(i, 1)<20):
-                        notiz_temp = "Great weather!";
-                        break;
-
-                    case (20<=data.getValue(i, 1)<21):
-                        notiz_temp = "Waaaah it's so warm!";
-                        break;
-                }
-                document.getElementById('temp_textarea').innerHTML = notiz_temp; //this is to make the notiz_temp value available to html.
-            }
-
-            var options = {
-                width: 600,
-                height: 400,
-                bar: {groupWidth: "95%"},
-                legend: { position: "none" },
-            };
-            var chart = new google.visualization.ColumnChart(document.getElementById("chart_temp"));
-            chart.draw(view, options);
-        }*/
 
 
         function drawChart_luft() {
@@ -114,31 +43,32 @@
             var notiz_luft = "I don't have a humidity factor";
             for (var i = 0; i < data.getNumberOfRows(); i++) {
                 switch (data.getValue(i, 1)) {
-                    case (data.getValue(i, 1)<18):
+                    case (data.getValue(i, 1) < 18):
                         notiz_temp = "It's too cold!";
                         break;
 
-                    case (18<data.getValue(i, 1)<19):
+                    case (18 < data.getValue(i, 1) < 19):
                         notiz_temp = "It's getting a little drafty...";
                         break;
 
-                    case (19<=data.getValue(i, 1)<20):
+                    case (19 <= data.getValue(i, 1) < 20):
                         notiz_temp = "Great weather!";
                         break;
 
-                    case (20<=data.getValue(i, 1)<21):
+                    case (20 <= data.getValue(i, 1) < 21):
                         notiz_temp = "Waaaah it's so warm!";
                         break;
                 }
                 document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
             }
+            ;
 
             var options = {
                 width: 400,
                 height: 400,
-                greenFrom:40, greenTo:60,
+                greenFrom: 40, greenTo: 60,
                 redFrom: 80, redTo: 100,
-                yellowFrom:60, yellowTo: 80,
+                yellowFrom: 60, yellowTo: 80,
                 minorTicks: 6
             };
 
@@ -146,82 +76,16 @@
 
             chart.draw(data, options);
 
-            setInterval(function() {
+            setInterval(function () {
                 data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
                 chart.draw(data, options);
             }, 13000);
 
         }
 
-        function drawChart_co2() {
 
-        }
 
         function drawChart_laut() {
-            /*var data = google.visualization.arrayToDataTable([
-                ['Zeit', 'aktuelle Lautstärke', 'Grenzwert'],
-                ['',  0.0,         55.0],
-                ['aktuelle Zeit',  60.0,        55.0],
-                ['',  0.0,        55.0]
-            ]);
-
-            var options = {
-                width: 600,
-                height: 400,
-                vAxis: {title: 'DB'},
-                seriesType: 'bars',
-                series: {1: {type: 'line'}}
-            };
-
-            var chart = new google.visualization.ComboChart(document.getElementById('chart_laut'));
-            chart.draw(data, options);
-
-
-        }
-
-           /* var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Zeit');
-            data.addColumn('number', 'Laustärke in db');
-
-            data.addRows([
-                ["15.00 h",  77.00],
-                ["16.00 h",  80.00],
-                ["17.00 h",  68.00],
-                ["18.00 h",  57.00],
-                ["19.00 h",  40.00]
-            ]);
-
-            var notiz_laut = "I don't have a loudness factor";
-            for (var i = 0; i < data.getNumberOfRows(); i++) {
-                switch (data.getValue(i, 1)) {
-                    case (data.getValue(i, 1)<18):
-                        notiz_temp = "It's too cold!";
-                        break;
-
-                    case (18<data.getValue(i, 1)<19):
-                        notiz_temp = "It's getting a little drafty...";
-                        break;
-
-                    case (19<=data.getValue(i, 1)<20):
-                        notiz_temp = "Great weather!";
-                        break;
-
-                    case (20<=data.getValue(i, 1)<21):
-                        notiz_temp = "Waaaah it's so warm!";
-                        break;
-                }
-                document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
-            }
-
-            var options = {
-                width: 600,
-                height: 400,
-                title: "Toppings I Like On My Pizza"
-            };
-
-            var chart = new google.charts.Line(document.getElementById('chart_laut'));
-
-            chart.draw(data, google.charts.Line.convertOptions(options));*/
         }
 
     </script>
@@ -229,24 +93,34 @@
 
         h2{
             font-family: Arial;
+            color: #778899;
         }
 
         table{
-            background-color: #CEF6E3;
+            background-color: #F5FFFA;
             padding: 40px;
             height:100%;
             width: 100%;
         }
 
-/*        td{
-            width: 20%;
+        textarea {
+            width: 100%;
+            height: 20%;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 3px solid #778899;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            resize: none;
+        }
 
-        }*/
+
 
         #kachel{
             position: center;
-            background-color: white;
-            border: 3px solid #000;
+            background-color: #F5FFFA;
+            border: 3px solid #778899;
             height: 20%;
             width: 40%;
         }
@@ -257,21 +131,23 @@
             width:40%;
         }
 
-        #co2_super{
+        #temp_ok{
+            /*<i class="material-icons" id="temp_cold">sentiment_very_satisfied</i>*/
             font-size: 300px;
             color: green;
             position: center;
+
         }
 
-        #co2_ok{
-            /*<i class="material-icons" id="co2_ok">sentiment_satisfied</i>*/
+        #temp_cold{
+            /*<i class="material-icons" id="temp_cold">ac_unit</i>*/
             font-size: 300px;
-            color: yellow;
+            color: blue;
             position: center;
         }
 
-        #co2_bad{
-            /*<i class="material-icons" id="co2_ok">sentiment_very_dissatisfied</i>*/
+        #temp_hot{
+            /*<i class="material-icons" id="temp_hot">fireplace</i>*/
             font-size: 300px;
             color: red;
             position: center;
@@ -283,9 +159,10 @@
         }
 
         #laut_ok{
-            font-size: 300px;
-            color: yellow;
+            font-size:300px;
+            color: orange;
             position: center;
+
         }
 
         #laut_bad{
@@ -300,40 +177,11 @@
 <body>
 <table>
     <tr>
-        <td id="kachel">
-            <div id="chart_temp"></div>
-        </td>
-
-        <td>
-            <td>
-
-                <textarea id="temp_textarea">Text to be changed</textarea>
-
-            </td>
-
-            <td>
-
-                <textarea id="luft_textarea">Text to be changed</textarea>
-
-            </td>
-        </td>
-
-
-        <td id="kachel">
-            <div id="chart_luft"></div>
-        </td>
-    </tr>
-
-    <tr>
         <td id="titel">
-            <p id="output"></p> <!--This is to test what title_temp has been set.-->
             <h2>Temperatur</h2>
         </td>
 
-
         <td>
-            <td></td>
-            <td></td>
         </td>
 
         <td id="titel">
@@ -342,56 +190,64 @@
     </tr>
 
     <tr>
-    </tr>
-
-    <tr>
-    </tr>
-
-    <tr>
-
         <td id="kachel">
-            <div id="chart_co">
-                <i class="material-icons" id="co2_super">sentiment_very_satisfied</i>
+            <div id="chart_temp">
+                <i class="material-icons" id="temp_hot">fireplace</i>
             </div>
         </td>
 
-        </td>
-
         <td>
+        </td>
+
+
+        <td id="kachel">
+            <div id="chart_luft" style="background-color: white"></div>
+        </td>
+    </tr>
+
+    <tr>
         <td>
-
-            <textarea id="co_textarea">Text to be changed</textarea>
-
+            <textarea id="temp_textarea">Text to be changed</textarea>
         </td>
-
         <td>
-
-            <textarea id="laut_textarea">Text to be changed</textarea>
-
         </td>
+        <td>
+            <textarea id="luft_textarea">Text to be changed</textarea>
         </td>
+    </tr>
 
+    <tr>
+        <td>
+        </td>
+        <td id="titel">
+            <h2>Lautstärke</h2>
+        </td>
+        <td>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+        </td>
         <td id="kachel">
             <div id="chart_laut">
                 <i class="material-icons" id="laut_ok">volume_up</i>
             </div>
         </td>
+        <td>
+        </td>
     </tr>
 
     <tr>
-        <td id="titel">
-            <h2>CO2</h2>
-        </td>
-
         <td>
-            <td></td>
-            <td></td>
         </td>
-
-        <td id="titel">
-            <h2>Lautstärke</h2>
+        <td>
+            <textarea id="laut_textarea">Text to be changed</textarea>
+        </td>
+        <td>
         </td>
     </tr>
+
 
 </table>
 
