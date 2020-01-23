@@ -104,12 +104,14 @@
 
 
         function drawChart_laut() {
-
+            var icon_laut;
             var notiz_laut;
             if (parseFloat(loudness) >= 50) {
                 notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
+
             } else if (40 <= parseFloat(loudness) && parseFloat(loudness) < 50) {
                 notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
+
             } else if (parseFloat(loudness) < 40) {
                 notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
             } else {
@@ -144,6 +146,7 @@
             font-size: 16px;
             resize: none;
         }
+
 
 
 
@@ -201,6 +204,10 @@
             position: center;
         }
 
+        #time {
+         width:50%;
+        }
+
 
     </style>
 </head>
@@ -231,7 +238,18 @@
 
 
         <td id="kachel">
-            <div id="chart_luft" style="background-color: white"></div>
+            <div id="chart_luft"></div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <textarea id="time">Uhrzeit:</textarea>
+        </td>
+        <td>
+        </td>
+        <td>
+            <textarea id="time">Uhrzeit:</textarea>
         </td>
     </tr>
 
@@ -263,6 +281,15 @@
             <div id="chart_laut">
                 <i class="material-icons" id="laut_ok">volume_up</i>
             </div>
+        </td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>
+        </td>
+        <td>
+            <textarea id="time">Uhrzeit:</textarea>
         </td>
         <td>
         </td>
