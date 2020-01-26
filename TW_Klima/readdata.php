@@ -35,7 +35,7 @@ if ($result->num_rows > 0) {
     }
 }
 header('Content-type: application/json');
-echo json_encode($result_array);
+echo json_encode($result_array[0]);
 
 $conn->close();
 
