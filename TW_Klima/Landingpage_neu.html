@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" xmlns:url="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Landingpage</title>
@@ -7,116 +7,155 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
 
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+
+    <script type="text/javascript">
+        var values = {};
+        var temperature = "0";
+        var humidity;
+        var loudness;
+
+        function ajaxcall () {
+            $.ajax({
+                url: 'http://localhost/atmospace/readdata.php',
+                complete: function (response) {
+                    var json_values = response.responseText;
+                    values = JSON.parse(json_values);
+                    temperature = values.temperature;
+                    humidity = values.humidity;
+                    loudness = values.loudness;
+                    $('#date_time').html(values.date_time);
+                    console.log(response.responseText);
+                },
+                error: function () {
+                    console.log('error');
+                    $('#output').html('Bummer: there was an error!');
+                }
+            });
+            return false;
+        };
+        setInterval(function() {
+            ajaxcall();},1000);
+        window.onload = function() {
+            ajaxcall();
+            setTimeout(function(){charts()},2000);
+        }
+    </script>
+
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
-        var temperature = '{{temperature}}';
-        var humidity = '{{humidity}}';
-        var loudness = '{{loudness}}';
-        temperature = '20';
-        humidity = '72';
-        loudness = '60';
+        function charts () {
 
-        google.charts.load("current", {packages:['corechart']});
-        google.charts.setOnLoadCallback(drawChart_temp);
-        <!--Luftfeuchte-->
-        google.charts.load('current', {'packages':['gauge']});
-        google.charts.setOnLoadCallback(drawChart_luft);
-        <!--Lautstärke-->
-        google.charts.load('current', {'packages':['line']});
-        google.charts.setOnLoadCallback(drawChart_laut);
+            /*            temperature = '20.3';
+                        humidity = '72.4';
+                        loudness = '60.7';*/
 
+            google.charts.load("current", {packages: ['corechart']});
+            google.charts.setOnLoadCallback(drawChart_temp);
+            <!--Luftfeuchte-->
+            google.charts.load('current', {'packages': ['gauge']});
+            google.charts.setOnLoadCallback(drawChart_luft);
+            <!--Lautstärke-->
+            google.charts.load('current', {'packages': ['line']});
+            google.charts.setOnLoadCallback(drawChart_laut);
 
 
-        // Callback that creates and populates a data table,
-        // instantiates the pie chart, passes in the data and
-        // draws it.
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
 
 
-        // Create the data table.
-        function drawChart_temp() {
+            // Create the data table.
+            function drawChart_temp() {
+                setInterval(function () {
 
-            var notiz_temp;
-            console.log(parseFloat(temperature));
-            if (parseFloat(temperature) < 18) {
-                notiz_temp = "Brr… It’s cold as Ice! Dreh mal die Heizung auf!";
-            } else if (18 < parseFloat(temperature) && parseFloat(temperature) <= 19.9) {
-                notiz_temp = "Baby it’s getting cold inside! Fenster zu und Heizung an!";
-            } else if (19.9 < parseFloat(temperature) && parseFloat(temperature) <= 24.9) {
-                notiz_temp = "I got the right temperature – so lässt es sich aushalten!";
-            } else if (24.9 < parseFloat(temperature) && parseFloat(temperature) < 26.9)  {
-                notiz_temp = "It’s getting hot in here – also mach mal die Fenster auf Kippstellung";
-            } else if (26.9 <= parseFloat(temperature)) {
-                notiz_temp = "The heat is on! Mindestens 3 Minuten stoßlüften und Jalousien runter!";
-            } else {
-                notiz_temp = "I don't have a temperature";
+                    var notiz_temp;
+                    console.log(temperature);
+                    if (parseFloat(temperature) < 18) {
+                        notiz_temp = "Brr… It’s cold as Ice! Dreh mal die Heizung auf!";
+                    } else if (18 < parseFloat(temperature) && parseFloat(temperature) <= 19.9) {
+                        notiz_temp = "Baby it’s getting cold inside! Fenster zu und Heizung an!";
+                    } else if (19.9 < parseFloat(temperature) && parseFloat(temperature) <= 24.9) {
+                        notiz_temp = "I got the right temperature – so lässt es sich aushalten!";
+                    } else if (24.9 < parseFloat(temperature) && parseFloat(temperature) < 26.9) {
+                        notiz_temp = "It’s getting hot in here – also mach mal die Fenster auf Kippstellung";
+                    } else if (26.9 <= parseFloat(temperature)) {
+                        notiz_temp = "The heat is on! Mindestens 3 Minuten stoßlüften und Jalousien runter!";
+                    } else {
+                        notiz_temp = "I don't have a temperature";
+                    }
+                    document.getElementById('temp_textarea').innerHTML = notiz_temp;
+
+                }, 3000);
+
             }
-            document.getElementById('temp_textarea').innerHTML = notiz_temp;
 
+
+            function drawChart_luft() {
+                setInterval(function () {
+
+                    var data = google.visualization.arrayToDataTable([
+                        ['Label', 'Value'],
+                        ['%', parseFloat(humidity)]
+
+                    ]);
+
+                    var notiz_luft;
+                    if (parseFloat(humidity) > 80) {
+                        notiz_luft = "Tropisches Klima – Pflanzen umsiedeln und Schälchen mit Salz aufstellen.";
+                    } else if (70 <= parseFloat(humidity) && parseFloat(humidity) <= 80) {
+                        notiz_luft = "Fast zu feucht";
+                    } else if (62 <= parseFloat(humidity) && parseFloat(humidity) < 70) {
+                        notiz_luft = "Angenehme Luftfeutigkeit – so kann es bleiben!";
+                    } else if (55 <= parseFloat(humidity) && parseFloat(humidity) < 62) {
+                        notiz_luft = "Fast zu trocken";
+                    } else if (55 > parseFloat(humidity)) {
+                        notiz_luft = "Wüstenluft - Schälchen mit Wasser aufstellen (am besten auf der Heizung)";
+                    } else {
+                        notiz_luft = "I don't have a humidity reading";
+                    }
+                    document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
+
+                    var options = {
+                        width: 400,
+                        height: 400,
+                        greenFrom: 40, greenTo: 60,
+                        redFrom: 80, redTo: 100,
+                        yellowFrom: 60, yellowTo: 80,
+                        minorTicks: 6
+                    };
+
+                    var chart = new google.visualization.Gauge(document.getElementById('chart_luft'));
+
+                    chart.draw(data, options);
+
+
+                }, 3000);
+
+            }
+
+
+            function drawChart_laut() {
+                setInterval(function () {
+
+                    var notiz_laut;
+                    if (parseFloat(loudness) >= 50) {
+                        notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
+                    } else if (40 <= parseFloat(loudness) && parseFloat(loudness) < 50) {
+                        notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
+                    } else if (parseFloat(loudness) < 40) {
+                        notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
+                    } else {
+                        notiz_laut = "I don't have a loudness reading.";
+                    }
+                    document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
+
+                }, 3000);
+            }
         }
 
-
-        function drawChart_luft() {
-
-            var data = google.visualization.arrayToDataTable([
-                ['Label', 'Value'],
-                ['%', parseFloat(humidity)]
-
-            ]);
-
-            var notiz_luft;
-            if (parseFloat(humidity) > 80) {
-                notiz_luft = "Tropisches Klima – Pflanzen umsiedeln und Schälchen mit Salz aufstellen.";
-            } else if (70 <= parseFloat(humidity) && parseFloat(humidity) <= 80) {
-                notiz_luft = "Fast zu feucht";
-            } else if (62 <= parseFloat(humidity) && parseFloat(humidity) < 70) {
-                notiz_luft = "Angenehme Luftfeutigkeit – so kann es bleiben!";
-            } else if (55 <= parseFloat(humidity) && parseFloat(humidity) < 62) {
-                notiz_luft = "Fast zu trocken";
-            } else if (55 > parseFloat(humidity)) {
-                notiz_luft = "Wüstenluft - Schälchen mit Wasser aufstellen (am besten auf der Heizung)";
-            } else {
-                notiz_luft = "I don't have a humidity reading";
-            }
-            document.getElementById('luft_textarea').innerHTML = notiz_luft; //this is to make the notiz_temp value available to html.
-
-            var options = {
-                width: 400,
-                height: 400,
-                greenFrom: 40, greenTo: 60,
-                redFrom: 80, redTo: 100,
-                yellowFrom: 60, yellowTo: 80,
-                minorTicks: 6
-            };
-
-            var chart = new google.visualization.Gauge(document.getElementById('chart_luft'));
-
-            chart.draw(data, options);
-
-            setInterval(function () {
-                data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
-                chart.draw(data, options);
-            }, 13000);
-
-        }
-
-
-
-        function drawChart_laut() {
-
-            var notiz_laut;
-            if (parseFloat(loudness) >= 50) {
-                notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
-            } else if (40 <= parseFloat(loudness) && parseFloat(loudness) < 50) {
-                notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
-            } else if (parseFloat(loudness) < 40) {
-                notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
-            } else {
-                notiz_laut = "I don't have a loudness reading.";
-            }
-            document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
-        }
 
     </script>
     <style>
