@@ -18,7 +18,7 @@
 
         function ajaxcall () {
             $.ajax({
-                url: 'http://localhost/atmospace/readdata.php',
+                url: '/readdata.php',
                 complete: function (response) {
                     var json_values = response.responseText;
                     values = JSON.parse(json_values);
@@ -236,7 +236,8 @@
         }
 
         #chart_luft{
-            position: center;
+            margin: 0 auto;
+            width: 400px;
         }
 
         #temp_ok{
@@ -280,7 +281,7 @@
         }
 
         #time {
-            width:50%;
+            width:100%;
         }
 
 
