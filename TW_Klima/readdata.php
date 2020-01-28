@@ -6,8 +6,8 @@
  */
 
 $servername = "localhost"; //Da das skript auf dem gleichen Webserver läuft wie die DB, ist das richtig. Sonst die IP-Adresse, wo die DB läuft.
-$username = "atmospace"; //this has to be replaced with the actual username when implemented
-$password = "atmospace"; //this should also be replaced when implemented
+$username = "root"; //this has to be replaced with the actual username when implemented
+$password = "passwort"; //this should also be replaced when implemented
 $dbname = "atmospace"; //and the database probably also has a different name
 
 $result_array = array();

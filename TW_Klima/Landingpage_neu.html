@@ -14,6 +14,7 @@
         var temperature = "0";
         var humidity;
         var loudness;
+        var date_time;
 
         function ajaxcall () {
             $.ajax({
@@ -24,6 +25,7 @@
                     temperature = values.temperature;
                     humidity = values.humidity;
                     loudness = values.loudness;
+                    date_time = values.date_time;
                     $('#date_time').html(values.date_time);
                     console.log(response.responseText);
                 },
@@ -46,11 +48,16 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
+        function displayDateTime() {
+            document.getElementById("time").innerHTML = "Zeitpunkt meiner Daten: " + date_time;
+        }
+
         function charts () {
 
-            /*            temperature = '20.3';
+/*                        temperature = '19.3';
                         humidity = '72.4';
-                        loudness = '60.7';*/
+                        loudness = '45';
+                        date_time = ''*/
 
             google.charts.load("current", {packages: ['corechart']});
             google.charts.setOnLoadCallback(drawChart_temp);
@@ -73,16 +80,29 @@
 
                     var notiz_temp;
                     console.log(temperature);
+                    var x = document.getElementById("tempImage");
+                    var v;
+                    displayDateTime();
                     if (parseFloat(temperature) < 18) {
                         notiz_temp = "Brr… It’s cold as Ice! Dreh mal die Heizung auf!";
+                        v = "././Images/temp_too_cold.png";
+                        x.setAttribute("src", v);
                     } else if (18 < parseFloat(temperature) && parseFloat(temperature) <= 19.9) {
                         notiz_temp = "Baby it’s getting cold inside! Fenster zu und Heizung an!";
+                        v = "././Images/temp_cold.png";
+                        x.setAttribute("src", v);
                     } else if (19.9 < parseFloat(temperature) && parseFloat(temperature) <= 24.9) {
                         notiz_temp = "I got the right temperature – so lässt es sich aushalten!";
+                        v = "././Images/temp_ok.png";
+                        x.setAttribute("src", v);
                     } else if (24.9 < parseFloat(temperature) && parseFloat(temperature) < 26.9) {
                         notiz_temp = "It’s getting hot in here – also mach mal die Fenster auf Kippstellung";
+                        v = "././Images/temp_hot.png";
+                        x.setAttribute("src", v);
                     } else if (26.9 <= parseFloat(temperature)) {
                         notiz_temp = "The heat is on! Mindestens 3 Minuten stoßlüften und Jalousien runter!";
+                        v = "././Images/temp_too_hot.png";
+                        x.setAttribute("src", v);
                     } else {
                         notiz_temp = "I don't have a temperature";
                     }
@@ -103,6 +123,8 @@
                     ]);
 
                     var notiz_luft;
+                    console.log(humidity);
+                    displayDateTime();
                     if (parseFloat(humidity) > 80) {
                         notiz_luft = "Tropisches Klima – Pflanzen umsiedeln und Schälchen mit Salz aufstellen.";
                     } else if (70 <= parseFloat(humidity) && parseFloat(humidity) <= 80) {
@@ -141,14 +163,26 @@
                 setInterval(function () {
 
                     var notiz_laut;
+                    var x = document.getElementById("loudImage");
+                    var v;
+                    console.log(loudness);
+                    displayDateTime();
                     if (parseFloat(loudness) >= 50) {
                         notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
+                        v = "././Images/loud_too_loud.png";
+                        x.setAttribute("src", v);
                     } else if (40 <= parseFloat(loudness) && parseFloat(loudness) < 50) {
                         notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
+                        v = "././Images/loud_loud.png";
+                        x.setAttribute("src", v);
                     } else if (parseFloat(loudness) < 40) {
                         notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
+                        v = "././Images/loud_ok.png";
+                        x.setAttribute("src", v);
                     } else {
                         notiz_laut = "I don't have a loudness reading.";
+                        v = "././Images/no_data.png";
+                        x.setAttribute("src", v);
                     }
                     document.getElementById('laut_textarea').innerHTML = notiz_laut; //this is to make the notiz_temp value available to html.
 
@@ -170,6 +204,7 @@
             padding: 40px;
             height:100%;
             width: 100%;
+            text-align:center;
         }
 
         textarea {
@@ -189,15 +224,19 @@
         #kachel{
             position: center;
             background-color: #F5FFFA;
-            border: 3px solid #778899;
+            /*border: 3px solid #778899;*/
             height: 20%;
-            width: 40%;
+            width: 33%;
         }
 
         #titel{
             text-align: center;
             color:black;
-            width:40%;
+            width:33%;
+        }
+
+        #chart_luft{
+            position: center;
         }
 
         #temp_ok{
@@ -254,7 +293,8 @@
             <h2>Temperatur</h2>
         </td>
 
-        <td>
+        <td id="titel">
+            <textarea readonly id="time" onload="displayDateTime()">Zeitpunkt meiner Daten:</textarea>
         </td>
 
         <td id="titel">
@@ -264,12 +304,11 @@
 
     <tr>
         <td id="kachel">
-            <div id="chart_temp">
-                <i class="material-icons" id="temp_hot">fireplace</i>
-            </div>
+            <img src="././Images/no_data.png" id="tempImage" alt="Icon for temperature" height="50%" width="auto"></img
+
         </td>
 
-        <td>
+        <td id="kachel">
         </td>
 
 
@@ -280,23 +319,23 @@
 
     <tr>
         <td>
-            <textarea readonly id="time">Uhrzeit:</textarea>
+<!--            <textarea readonly id="time" onload="displayDateTime()">Uhrzeit:</textarea>-->
         </td>
         <td>
         </td>
         <td>
-            <textarea readonly id="time">Uhrzeit:</textarea>
+<!--            <textarea readonly id="time" onload="displayDateTime()">Uhrzeit:</textarea>-->
         </td>
     </tr>
 
     <tr>
         <td>
-            <textarea readonly id="temp_textarea">Text to be changed</textarea>
+            <textarea readonly id="temp_textarea">Warte noch auf Daten...</textarea>
         </td>
         <td>
         </td>
         <td>
-            <textarea readonly id="luft_textarea">Text to be changed</textarea>
+            <textarea readonly id="luft_textarea">Warte noch auf Daten...</textarea>
         </td>
     </tr>
 
@@ -314,9 +353,7 @@
         <td>
         </td>
         <td id="kachel">
-            <div id="chart_laut">
-                <i class="material-icons" id="laut_ok">volume_up</i>
-            </div>
+            <img src="././Images/no_data.png" id="loudImage" alt="Icon for loudness" height="50%" width="auto"></img
         </td>
         <td>
         </td>
@@ -325,7 +362,7 @@
         <td>
         </td>
         <td>
-            <textarea readonly id="time">Uhrzeit:</textarea>
+            <textarea readonly id="laut_textarea">Warte noch auf Daten...</textarea>
         </td>
         <td>
         </td>
@@ -335,7 +372,6 @@
         <td>
         </td>
         <td>
-            <textarea readonly id="laut_textarea">Text to be changed</textarea>
         </td>
         <td>
         </td>
