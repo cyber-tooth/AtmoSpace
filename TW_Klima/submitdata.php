@@ -6,9 +6,9 @@
  * Die Zahlenwerte nur zum testen. Wenn das Skript in die Tabelle schreibt, dann htmlspecialchars... entkommentieren, die Zahlenwerte löschen und mit dem PI verbinden:)
  * Ich habe keinen Wert für die Zeit und das Datum angegeben, da meine Testtabelle eine Timestamp automatisch hinzufügt.
 */
-$temperature = 38.5;//htmlspecialchars($_POST["temperature"]);
-$humidity = 87.3;//htmlspecialchars($_POST["humidity"]);
-$loudness = 37.7;//htmlspecialchars($_POST["loudness"]);
+$temperature = htmlspecialchars($_POST["temperature"]);
+$humidity = htmlspecialchars($_POST["humidity"]);
+$loudness = htmlspecialchars($_POST["loudness"]);
 
 echo "temperature: $temperature humidity: $humidity loudness: $loudness";
 

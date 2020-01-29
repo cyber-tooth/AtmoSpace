@@ -167,15 +167,15 @@
                     var v;
                     console.log(loudness);
                     displayDateTime();
-                    if (parseFloat(loudness) >= 50) {
+                    if (parseFloat(loudness) >= 5000) {
                         notiz_laut = "Psst – es ist zu laut! Fenster schließen, kurze Pause und ruhig weiterreden.";
                         v = "././Images/loud_too_loud.png";
                         x.setAttribute("src", v);
-                    } else if (40 <= parseFloat(loudness) && parseFloat(loudness) < 50) {
+                    } else if (4000 <= parseFloat(loudness) && parseFloat(loudness) < 5000) {
                         notiz_laut = "Ganz schön laut hier – alle einen Gang zurückschalten und leiser weiter arbeiten.";
                         v = "././Images/loud_loud.png";
                         x.setAttribute("src", v);
-                    } else if (parseFloat(loudness) < 40) {
+                    } else if (parseFloat(loudness) < 4000) {
                         notiz_laut = "Angenehme Hintergrundgeräusche – so kann es weitergehen.";
                         v = "././Images/loud_ok.png";
                         x.setAttribute("src", v);
