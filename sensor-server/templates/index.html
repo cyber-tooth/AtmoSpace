@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Landingpage</title>
+    <style>
+        .container{
+            border: dotted;
+            background-color: crimson;
+            position: relative;
+        }
+        .flexcontainer_eins{
+            display:flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: cyan;
+            position: relative;
+         }
+        .flexcontainer_zwei{
+            display:flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: darkcyan;
+            position: relative;
+        }
+        .main{
+            text-align: center;
+            color:green;
+            flex-direction: row;
+            flex-grow: 2;
+            flex-shrink: 0;
+            flex-basis: 50%;
+        }
+        .boxen {
+            color: black;
+            border: 2px solid black;
+            padding: 20px;
+            margin: 20px;
+            background-color: deeppink;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="flexcontainer_eins">
+    <div class="main">
+         <div class="boxen"></div>
+            <h2>Temperatur</h2>
+    </div>
+    <div class="main">
+        <div class="boxen"></div>
+            <h2>Luftfeuchtigkeit</h2>
+    </div>
+</div>
+<div class="flexcontainer_zwei">
+    <div class="main">
+         <div class="boxen"></div>
+            <h2>CO 2</h2>
+    </div>
+
+    <div class="main">
+        <div class="boxen"></div>
+            <h2>Lautstärke</h2>
+    </div>
+</div>
+</div>
+</body>
+</html>
